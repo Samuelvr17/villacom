@@ -15,10 +15,10 @@ class ShippingAddress(models.Model):
     shipping_zipcode = models.CharField(max_length=200)
 
     class Meta:
-        verbose_name_plural = 'Shipping Address'
+        verbose_name_plural = 'Dirección Envio'
 
     def _str_(self):
-        return f'Shipping Address - {str(self.id)}'
+        return f'Dirección Envio - {str(self.id)}'
     
 
 # Crear Direccion de Envio (Shipping Address) Por Defecto Cuando el Usuario Se Registra 
@@ -45,7 +45,7 @@ class Order(models.Model):
     date_shipped = models.DateTimeField(blank=True, null=True)
 
     def _str_(self):
-        return f'Order - {str(self.id)}'
+        return f'Orden - {str(self.id)}'
     
     class Meta:
         verbose_name_plural = 'Ordenes'
@@ -69,7 +69,7 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def _str_(self):
-        return f'Order Item - {str(self.id)}'
+        return f'Orden Item - {str(self.id)}'
     
     class Meta:
         verbose_name_plural = 'Orden Items'

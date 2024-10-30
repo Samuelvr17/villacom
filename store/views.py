@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 import json
 from cart.cart import Cart
 from django.db.models import Q
+from payment.forms import ShippingForm 
+from payment.models import ShippingAddress
 
 
 def home(request):
@@ -89,19 +91,28 @@ def update_info(request):
         # Obtener el Usuario Actual
         current_user = Profile.objects.get(user__id=request.user.id)
         
-        # Formulario de Usuario (sin shipping info)
+        # Intentar obtener la dirección de envío
+        try:
+            shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
+            shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
+        except ShippingAddress.DoesNotExist:
+            shipping_user = None
+            shipping_form = ShippingForm(request.POST or None)  # Crear un nuevo formulario en blanco
+
+        # Formulario de Usuario
         form = UserInfoForm(request.POST or None, instance=current_user)
         
-        if form.is_valid():
+        if form.is_valid() and shipping_form.is_valid():
             form.save()
+            shipping_form.save()
             messages.success(request, "Su información ha sido actualizada")
             return redirect('home')
         
-        return render(request, 'update_info.html', {'form': form})
-    
+        return render(request, 'update_info.html', {'form': form, 'shipping_form': shipping_form})
     else:
-        messages.success(request, "Debe iniciar sesión para acceder a esta página")
+        messages.warning(request, "Debe iniciar sesión para acceder a esta página")
         return redirect('home')
+
     
 
 def update_password(request):
