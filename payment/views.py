@@ -84,7 +84,7 @@ def process_order(request):
         full_name = my_shipping['shipping_full_name']
         email = my_shipping['shipping_email']
         # Crear Shipping Address de la info de la sesion
-        shipping_address = f"{my_shipping['shipping_address']}\n{my_shipping['shipping_city']}\n{my_shipping['shipping_country']}\n{my_shipping['shipping_zipcode']}"
+        shipping_address = f"{my_shipping['shipping_address']}\n{my_shipping['shipping_city']}\n{my_shipping['shipping_zipcode']}"
         amount_paid = totals
         
         # Crear una Orden
