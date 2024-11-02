@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Tiendas</h1>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5 bg-light">
+        <div class="container px-4 px-lg-5">
+            <div class="text-center">
+                <h2 class="fw-bold"></h2>
+            </div>
+            <div class="row mt-4">
+                {% for tienda in tiendas %}  <!-- Cambia 'lugar' a 'tienda' -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ tienda.name }}</h5>  <!-- Cambia 'lugar' a 'tienda' -->
+                                <p class="card-text">Ubicación: {{ tienda.location }}</p>  <!-- Cambia 'ubicacion' a 'location' -->
+                                <p class="card-text">Teléfono: {{ tienda.phone }}</p>  <!-- Cambia 'telefono' a 'phone' -->
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-center">No hay tiendas registradas aún.</p>  <!-- Cambia el mensaje a "tiendas" -->
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

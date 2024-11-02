@@ -158,21 +158,9 @@ def category_summary(request):
     return render(request, 'category_summary.html', {'categories':categories})
 
 
-def tienda_summary(request):
-    businesses = Business.objects.all()  
-    return render(request, 'tienda_summary.html', {'businesses':businesses})
-
-
-def tienda(request, foo):
-    # reemplazar guiones con espacios
-    foo = foo.replace('-', ' ')
-    try:
-        business = Business.objects.get(name=foo)
-        products = Product.objects.filter(business=business)
-        return render(request, 'tienda.html', {'products': products, 'business': business})
-    except:
-        messages.success(request, ("La Categoría No Existe"))
-        return redirect('home')
+def lista_tiendas(request):
+    tiendas = Business.objects.all() 
+    return render(request, 'lista_tiendas.html', {'tiendas': tiendas})
 
 
 def search(request):
