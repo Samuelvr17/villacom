@@ -12,35 +12,32 @@ def payment_success(request):
 
 
 def checkout(request):
+    # Verifica si el usuario está autenticado
+    if not request.user.is_authenticated:
+        messages.info(request, "Debe iniciar sesión para completar el pago.")
+        return redirect('login')  # Redirige al formulario de inicio de sesión
+
     cart = Cart(request)
     cart_products = cart.get_prods()
     quantities = cart.get_quants()
     totals = cart.cart_total()
 
-    if request.user.is_authenticated:
-        # Intentar obtener la dirección de envío
-        try:
-            shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
-            shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
-        except ShippingAddress.DoesNotExist:
-            shipping_user = None
-            shipping_form = ShippingForm(request.POST or None)  # Crear un nuevo formulario en blanco
-            messages.warning(request, "No tiene una dirección de envío. Por favor, añádala.")
+    # Si el usuario está autenticado, intenta obtener la dirección de envío
+    try:
+        shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
+    except ShippingAddress.DoesNotExist:
+        shipping_user = None
+        shipping_form = ShippingForm(request.POST or None)  # Formulario en blanco
+        messages.warning(request, "No tiene una dirección de envío. Por favor, añádala.")
 
-        return render(request, 'checkout.html', {
-            'cart_products': cart_products,
-            'quantities': quantities,
-            'totals': totals,
-            'shipping_form': shipping_form
-        })
-    else:
-        shipping_form = ShippingForm(request.POST or None)
-        return render(request, 'checkout.html', {
-            'cart_products': cart_products,
-            'quantities': quantities,
-            'totals': totals,
-            'shipping_form': shipping_form
-        })
+    return render(request, 'checkout.html', {
+        'cart_products': cart_products,
+        'quantities': quantities,
+        'totals': totals,
+        'shipping_form': shipping_form
+    })
+
 
 
 def billing_info(request):
