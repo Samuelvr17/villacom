@@ -2,6 +2,64 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django import forms
 from .models import Profile
+from .models import Product, Category, Business
+
+
+class BusinessForm(forms.ModelForm):
+    class Meta:
+        model = Business
+        fields = ['name', 'location', 'phone']
+        labels = {
+            'name': '',
+            'location': '',
+            'phone': '',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BusinessForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Nombre de la Tienda'})
+        self.fields['location'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Ubicación de la Tienda'})
+        self.fields['phone'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Teléfono de Contacto'})
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        labels = {
+            'name': '',  # Deja el label vacío para que no se muestre
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Nombre de la categoría'})
+		
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['business', 'name', 'price', 'category', 'description', 'image', 'is_sale', 'sale_price']
+        labels = {
+            'business': 'Tienda',                 # Cambiar nombre a 'Tienda'
+            'name': 'Nombre del producto',         # Nombre del campo para 'name'
+            'price': 'Precio',                    # Cambiar nombre a 'Precio'
+            'category': 'Categoría',              # Cambiar nombre a 'Categoría'
+            'description': 'Descripción',          # Nombre del campo para 'description'
+            'image': 'Subir imagen',              # Nombre del campo para 'image'
+            'is_sale': 'Descuento',               # Cambiar nombre a 'Descuento'
+            'sale_price': 'Precio Descuento',     # Cambiar nombre a 'Precio Descuento'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.fields['business'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Negocio'})
+        self.fields['name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Nombre del producto'})
+        self.fields['price'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Precio del producto'})
+        self.fields['category'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Categoría'})
+        self.fields['description'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Descripción del producto'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Subir imagen del producto'})
+        self.fields['is_sale'].widget.attrs.update({'class': 'form-check-input'})  # Para el campo booleano
+        self.fields['sale_price'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Precio en oferta'})
 
 
 class SignUpForm(UserCreationForm):

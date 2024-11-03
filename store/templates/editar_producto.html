@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header -->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Editar Producto</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Busca y edita la información del producto</p>
+        </div>
+    </div>
+</header>
+
+<!-- Formulario de Búsqueda -->
+<div class="container my-4" style="max-width: 600px; margin: 0 auto;">
+    <form method="GET" action="{% url 'buscar_producto' %}">  <!-- Cambia 'buscar_producto' a la url correcta -->
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Buscar por nombre del producto" value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Resultados de Búsqueda -->
+{% if productos %}
+    <div class="container my-4" style="max-width: 600px; margin: 0 auto;">
+        <h3>Resultados de la Búsqueda:</h3>
+        <ul class="list-group">
+            {% for producto in productos %}
+                <li class="list-group-item">
+                    <a href="{% url 'editar_producto' pk=producto.id %}">{{ producto.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- Formulario de Edición -->
+{% if producto %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success mx-2">Actualizar</button>
+                        <a href="{% url 'home' %}" class="btn btn-secondary mx-2">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<br><br><br><br><br><br>
+{% endblock %}

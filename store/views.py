@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Profile, Category, Business
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 from django.contrib.auth import authenticate, login, logout
@@ -9,6 +9,155 @@ from cart.cart import Cart
 from django.db.models import Q
 from payment.forms import ShippingForm 
 from payment.models import ShippingAddress
+from .forms import ProductForm, CategoryForm, BusinessForm
+
+
+def crear_tienda(request):
+    if request.method == 'POST':
+        form = BusinessForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tienda creada exitosamente.')
+            return redirect('home')
+    else:
+        form = BusinessForm()
+    return render(request, 'formulario_tienda.html', {'form': form})
+
+
+def editar_tienda(request, pk=None):
+    business = None
+    form = None
+
+    # Si el usuario ha enviado un término de búsqueda por nombre
+    query = request.GET.get('query')
+    if query:
+        businesses = Business.objects.filter(name__icontains=query)
+    else:
+        businesses = None
+
+    # Si se recibe un pk específico para edición, cargar la tienda correspondiente
+    if pk:
+        business = get_object_or_404(Business, pk=pk)
+        if request.method == 'POST':
+            form = BusinessForm(request.POST, instance=business)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Tienda actualizada exitosamente.')
+                return redirect('home')  # Cambia 'home' por la URL a la que quieras redirigir
+        else:
+            form = BusinessForm(instance=business)
+
+    return render(request, 'editar_tienda.html', {
+        'form': form,
+        'business': business,
+        'businesses': businesses,
+        'query': query,
+    })
+
+
+def eliminar_tienda(request, pk=None):
+    business = None
+
+    # Si el usuario ha enviado un término de búsqueda por nombre
+    query = request.GET.get('query')
+    if query:
+        businesses = Business.objects.filter(name__icontains=query)
+    else:
+        businesses = None
+
+    # Si se recibe un pk específico, buscar la tienda para confirmar la eliminación
+    if pk:
+        business = get_object_or_404(Business, pk=pk)
+        if request.method == 'POST':
+            business.delete()
+            messages.success(request, 'Tienda eliminada exitosamente.')
+            return redirect('home')  # Cambia 'home' por la URL adecuada para redirigir
+
+    return render(request, 'eliminar_tienda.html', {
+        'business': business,
+        'businesses': businesses,
+        'query': query,
+    })
+
+
+def crear_categoria(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Categoría creada exitosamente.')
+            return redirect('home')  # Redirige a la página principal o a una lista de categorías
+    else:
+        form = CategoryForm()
+    return render(request, 'formulario_categoria.html', {'form': form})
+
+
+def crear_producto(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto creado exitosamente.')
+            return redirect('home')  # Redirige a la página principal o a una lista de productos
+    else:
+        form = ProductForm()
+    return render(request, 'formulario_producto.html', {'form': form})
+
+
+def editar_producto(request, pk=None):
+    producto = None
+    form = None
+
+    # Si el usuario ha enviado un término de búsqueda por nombre
+    query = request.GET.get('query')
+    if query:
+        productos = Product.objects.filter(name__icontains=query)
+    else:
+        productos = None
+
+    # Si se recibe un pk específico para edición, cargar el producto correspondiente
+    if pk:
+        producto = get_object_or_404(Product, pk=pk)
+        if request.method == 'POST':
+            form = ProductForm(request.POST, request.FILES, instance=producto)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Producto actualizado exitosamente.')
+                return redirect('home')  
+        else:
+            form = ProductForm(instance=producto)
+
+    return render(request, 'editar_producto.html', {
+        'form': form,
+        'producto': producto,
+        'productos': productos,
+        'query': query,
+    })
+
+
+def eliminar_producto(request, pk=None):
+    producto = None
+
+    # Si el usuario ha enviado un término de búsqueda por nombre
+    query = request.GET.get('query')
+    if query:
+        productos = Product.objects.filter(name__icontains=query)
+    else:
+        productos = None
+
+    # Si se recibe un pk específico, buscar el producto para confirmar la eliminación
+    if pk:
+        producto = get_object_or_404(Product, pk=pk)
+        if request.method == 'POST':
+            producto.delete()
+            messages.success(request, 'Producto eliminado exitosamente.')
+            return redirect('home')  # Cambia 'home' por la URL adecuada para redirigir
+
+    return render(request, 'eliminar_producto.html', {
+        'producto': producto,
+        'productos': productos,
+        'query': query,
+    })
 
 
 def home(request):

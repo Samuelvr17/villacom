@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header -->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Eliminar Producto</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Busca y elimina un producto de la base de datos</p>
+        </div>
+    </div>
+</header>
+
+<!-- Formulario de Búsqueda -->
+<div class="container my-4" style="max-width: 600px; margin: 0 auto;">
+    <form method="GET" action="{% url 'buscar_producto_eliminar' %}">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Buscar por nombre de producto" value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Resultados de Búsqueda -->
+{% if productos %}
+    <div class="container my-4" style="max-width: 600px; margin: 0 auto;">
+        <h3>Resultados de la Búsqueda:</h3>
+        <ul class="list-group">
+            {% for producto in productos %}
+                <li class="list-group-item">
+                    <a href="{% url 'eliminar_producto' pk=producto.id %}">{{ producto.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- Confirmación de Eliminación -->
+{% if producto %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 text-center">
+                <h3>¿Estás seguro que deseas eliminar el producto {{ producto.name }}?</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+<br><br><br><br>
+{% endif %}
+
+{% endblock %}

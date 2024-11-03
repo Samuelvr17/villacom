@@ -43,7 +43,7 @@
                             <!-- Quantity Selector -->
                             <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
                                 <label style="font-size: 0.9rem;">Cantidad:</label>
-                                <select id="select{{product.id}}" style="padding: 0.25rem; border: 1px solid #ddd; border-radius: 4px; width: 60px; font-size: 0.9rem;">
+                                <select id="select{{product.id}}" class="quantity-select" style="padding: 0.25rem; border: 1px solid #ddd; border-radius: 4px; width: 60px; font-size: 0.9rem;">
                                     {% for key, value in quantities.items %}
                                         {% if key == product.id|slugify %}
                                             <option selected>{{ value }}</option>
@@ -85,7 +85,20 @@
 </div>
 
 <script>
-    // Update cart on quantity change
+    document.addEventListener('DOMContentLoaded', function() {
+        // Eliminar la opción seleccionada del dropdown para que no se repita
+        document.querySelectorAll('.quantity-select').forEach(function(selectElement) {
+            const selectedValue = selectElement.value; // Obtener el valor seleccionado actualmente
+            Array.from(selectElement.options).forEach(function(option) {
+                // Ocultar la opción si coincide con el valor seleccionado
+                if (option.value === selectedValue) {
+                    option.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Actualizar el carrito al cambiar la cantidad
     $(document).on('change', 'select[id^="select"]', function() {
         var productid = $(this).attr('id').replace('select', '');
         $.ajax({
@@ -106,7 +119,7 @@
         });
     });
 
-    // Delete cart item
+    // Eliminar producto del carrito
     $(document).on('click', '.delete-product', function(e){
         e.preventDefault();
         $.ajax({

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header -->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Editar Tienda</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Busca y edita la información de la tienda</p>
+        </div>
+    </div>
+</header>
+
+<!-- Formulario de Búsqueda -->
+<div class="container my-4" style="max-width: 600px; margin: 0 auto;">
+    <form method="GET" action="{% url 'buscar_tienda' %}"> <!-- Cambia la URL según corresponda -->
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Buscar por nombre de la tienda" value="{{ query }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Resultados de Búsqueda -->
+{% if businesses %}
+    <div class="container my-4" style="max-width: 600px; margin: 0 auto;">
+        <h3>Resultados de la Búsqueda:</h3>
+        <ul class="list-group">
+            {% for business in businesses %}
+                <li class="list-group-item">
+                    <a href="{% url 'editar_tienda' pk=business.id %}">{{ business.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- Formulario de Edición -->
+{% if business %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success mx-2">Actualizar</button>
+                        <a href="{% url 'home' %}" class="btn btn-secondary mx-2">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<br><br><br><br><br><br>
+{% endblock %}
