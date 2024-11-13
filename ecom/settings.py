@@ -25,12 +25,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY="django-insecure-rc5^*^3p3-kt$lsd+j(#8zjohfy=sc)l^v#tuxa73_1uy^%z6q"
 
 DATABASE_URL = config("DATABASE_URL")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG=False
 
 ALLOWED_HOSTS = ['villacom-2d5bc57845bb.herokuapp.com']
 
@@ -90,7 +90,12 @@ WSGI_APPLICATION = 'ecom.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.parse(config('DATABASE_URL'))
+    'default': dj_database_url.parse(
+        config(
+            'DATABASE_URL',
+            default='postgresql://postgres:LuDuIyJSKbOagnEPfmbOqVTKqCeaPkWc@postgres.railway.internal:5432/railway'
+        )
+    )
 }
 
 
