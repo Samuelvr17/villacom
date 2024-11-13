@@ -1,1 +1,1 @@
-web: gunicorn villacom.wsgi
+web: gunicorn ecom.wsgi
