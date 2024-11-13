@@ -60,7 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+,
 ]
 
 ROOT_URLCONF = 'ecom.urls'
@@ -89,13 +90,11 @@ WSGI_APPLICATION = 'ecom.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+
+
+
 DATABASES = {
-    'default': dj_database_url.parse(
-        config(
-            'DATABASE_URL',
-            default='postgresql://postgres:LuDuIyJSKbOagnEPfmbOqVTKqCeaPkWc@postgres.railway.internal:5432/railway'
-        )
-    )
+    'default': dj_database_url.config(default='postgresql://postgres:LuDuIyJSKbOagnEPfmbOqVTKqCeaPkWc@autorack.proxy.rlwy.net:31682/railway')
 }
 
 
