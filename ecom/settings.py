@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-rc5^*^3p3-kt$lsd+j(#8zjohfy=sc)l^v#tuxa73_1uy^%z6q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['villacom-production.up.railway.app', 'https://villacom-production.up.railway.app']
-CSRF_TRUSTED_ORIGINS = ['https://villacom-production.up.railway.app']
+ALLOWED_HOSTS = ['villacom-production-4c36.up.railway.app', 'https://villacom-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://villacom-production-4c36.up.railway.app']
 
 
 # Application definition
