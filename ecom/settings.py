@@ -32,7 +32,7 @@ DATABASE_URL = config("DATABASE_URL")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['villacom-2d5bc57845bb.herokuapp.com']
 
 
 # Application definition
